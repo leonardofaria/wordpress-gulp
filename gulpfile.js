@@ -11,17 +11,6 @@ var config = {
   dest: './wp-content/themes/blankslate'
 };
 
-gulp.task('rsync', function() {
-  rsync({
-    src: './wp-content/',
-    dest: 'user@host.com:~/www/path/to/website/wp-content',
-  }, function(error, stdout, stderr, cmd) {
-    console.log('error: ' + error);
-    console.log('stdout: ' + stdout);
-    console.log('stderr: ' + stderr);
-  });
-});
-
 gulp.task('serve', function() {
   browserSync.init({
     proxy: "http://localhost"
@@ -36,8 +25,15 @@ gulp.task('js', function() {
 
 gulp.task('css', function () {
   return gulp.src(config.sassPath + '/app.scss')
-    .pipe(sass({outputStyle: 'compressed'}).on('error', sass.logError))
+    .pipe(sass({outputStyle: 'compressed'}))
     .pipe(gulp.dest(config.dest));
+});
+
+gulp.task('rsync', function() {
+  rsync({
+    src: './wp-content/',
+    dest: 'user@host.com:~/www/path/to/website/wp-content',
+  });
 });
 
  gulp.task('watch', function() {
